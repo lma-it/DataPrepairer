@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:opencv="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity"
+    android:visibility="visible"
+    android:orientation="vertical"
+    android:id="@+id/layout">
+
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:id="@+id/position"
+        android:textSize="14dp"/>
+
+
+    <org.opencv.android.JavaCameraView
+        android:id="@+id/camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        opencv:camera_id="front" />
+
+    <View
+        android:id="@+id/dotView"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@android:color/holo_green_dark" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_gravity="bottom | center"
+        android:layout_marginRight="50sp"
+        android:layout_marginLeft="50sp"
+        android:layout_marginBottom="20sp">
+
+        <Button
+            android:id="@+id/button_pause_start"
+            android:layout_width="100sp"
+            android:layout_height="50sp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="5dp"
+            android:textAlignment="center"
+            android:onClick="togglePause"
+            android:text="PAUSE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lock_bounds"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/lock_bounds"
+            android:layout_width="100sp"
+            android:layout_height="50sp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="5dp"
+            android:onClick="toggleLockBounds"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeMaxTextSize="14sp"
+            android:textAlignment="center"
+            android:autoSizeStepGranularity="2sp"
+            android:text="LOCK BOUNDS"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_pause_start"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/lamp"
+            android:layout_width="10sp"
+            android:layout_height="10sp"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginBottom="20dp"
+            android:background="@android:color/darker_gray"
+            app:circularflow_angles="15"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_pause_start"
+            app:layout_constraintStart_toEndOf="@+id/lock_bounds"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>
