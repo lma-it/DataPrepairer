@@ -23,7 +23,6 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     CameraBridgeViewBase cameraBridgeViewBase;
     private SurfaceView surfaceView;
     private View dotView, lamp;
-    private TextView textView, progressX, progressY;
+    private TextView textView, statusView;
     private Button play_pause, lock_bounds;
     private static final int PERMISSION_REQUEST_CODE = 200;
     public float x;
@@ -41,9 +40,10 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     public int Ymax = 2200;
     public int Xmin = 300;
     public int Xmax = 1080;
+    public static int lock_status = 0;
     public FrameLayout layout;
-    public boolean isPaused = false;
-    private AtomicBoolean isLocked = new AtomicBoolean(false);
+    public boolean isPaused = true;
+    public boolean isLocked = false;
     Random random = new Random();
     public String position = "";
 
@@ -57,7 +57,11 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             lamp = findViewById(R.id.lamp);
             textView = findViewById(R.id.position);
             play_pause = findViewById(R.id.button_pause_start);
+            play_pause.getBackground().setAlpha(225);
             lock_bounds = findViewById(R.id.lock_bounds);
+            lock_bounds.getBackground().setAlpha(225);
+            statusView = findViewById(R.id.lock_stat);
+
 
 
             checkPermission();
@@ -77,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             }
 
             handler.post(runnableCode);
+            stathandler.post(statHandler);
+            play_pausehandler.post(play_pauseHandler);
         }
             private void checkPermission () {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -111,17 +117,14 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 // Move the dot to a random position
                 if (frame != null) {
 
-                    if(isLocked.get() == false) {
+                    if(lock_status == 0) {
                         x = random.nextFloat() * 1080;
                         y = random.nextFloat() * 2200;
 
                         position = "x: " + x + " y:" + y;
-                        textView.setText(position);
-                        textView.setTextColor(Color.BLACK);
-                        dotView.setX(x);
-                        dotView.setY(y);
+                        setPosition(position, dotView, textView, x, y);
 
-                    }else if (isLocked.get() == true & x == 0 || y == 0){
+                    }else if (lock_status == 1){
                         int Xlock = random.nextInt(2);
                         int Ylock = random.nextInt(2);
 
@@ -137,10 +140,27 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                             y = random.nextFloat() + random.nextInt((Ymax - Ymin) + 1) + Ymin;
                         }
                         position = "x: " + x + " y:" + y;
-                        textView.setText(position);
-                        textView.setTextColor(Color.BLUE);
-                        dotView.setX(x);
-                        dotView.setY(y);
+                        setPosition(position, dotView, textView, x, y);
+                    }else if(lock_status == 2){
+                        x = random.nextFloat() + random.nextInt(150);
+                        y = random.nextFloat() + random.nextInt(150);
+                        position = "x: " + x + " y:" + y;
+                        setPosition(position, dotView, textView, x, y);
+                    }else if(lock_status == 3){
+                        x = random.nextFloat() + random.nextInt((1076 - 150) + 1) + 150;
+                        y = random.nextFloat() + random.nextInt((2198 - 200) + 1) + 200;
+                        position = "x: " + x + " y:" + y;
+                        setPosition(position, dotView, textView, x, y);
+                    }else if(lock_status == 4){
+                        x = random.nextFloat() + random.nextInt(150);
+                        y = random.nextFloat() + random.nextInt((2198 - 200)+ 1) + 200;
+                        position = "x: " + x + " y:" + y;
+                        setPosition(position, dotView, textView, x, y);
+                    }else if(lock_status == 5){
+                        x = random.nextFloat() + random.nextInt((1076 - 150) + 1) + 150;
+                        y = random.nextFloat() + random.nextInt(200);
+                        position = "x: " + x + " y:" + y;
+                        setPosition(position, dotView, textView, x, y);
                     }
 
                     try {
@@ -154,6 +174,14 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     x = 0;
                     y = 0;
                 }
+            }
+
+            public void setPosition(String position, View view, TextView textView, float x, float y){
+                position = "x: " + x + " y:" + y;
+                textView.setText(position);
+                textView.setTextColor(Color.GREEN);
+                dotView.setX(x);
+                dotView.setY(y);
             }
 
             public void togglePause(View view) {
@@ -170,13 +198,22 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 }
             }
             public void toggleLockBounds(View view){
-
-                if(isLocked.get() == false) {
-                    isLocked.set(true);
+                String stat;
+                if(!isLocked || lock_status <= 5){
                     lamp.setBackgroundColor(Color.GREEN);
 
-                }else{
-                    isLocked.set(false);
+                    if(lock_status < 5){
+                        lock_status++;
+                        stat = "" + lock_status;
+                        statusView.setText(stat);
+                    }else {
+                        lock_status = 0;
+                        stat = "" + lock_status;
+                        statusView.setText(stat);
+                        isLocked = true;
+                    }
+                }else if(isLocked == true & lock_status == 0){
+                    isLocked = false;
                     lamp.setBackgroundColor(Color.GRAY);
                 }
             }
@@ -207,6 +244,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
 
         static final Handler handler = new Handler();
+        static final Handler stathandler = new Handler();
+        static final Handler play_pausehandler = new Handler();
         private final Runnable runnableCode = new Runnable() {
             @Override
             public void run() {
@@ -218,6 +257,19 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     throw new RuntimeException(e);
                 }
                 handler.postDelayed((Runnable) this, 2500);
+            }
+        };
+        private final Runnable statHandler = new Runnable() {
+            @Override
+            public void run() {
+                toggleLockBounds(lamp);
+            }
+        };
+
+        private final Runnable play_pauseHandler = new Runnable() {
+            @Override
+            public void run() {
+                togglePause(textView);
             }
         };
 

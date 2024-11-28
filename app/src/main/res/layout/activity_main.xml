@@ -54,6 +54,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/lock_bounds"
+            android:background="@android:color/transparent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
@@ -64,32 +65,51 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="40dp"
             android:layout_marginBottom="5dp"
-            android:onClick="toggleLockBounds"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="10sp"
             android:autoSizeMaxTextSize="14sp"
-            android:textAlignment="center"
+            android:autoSizeMinTextSize="10sp"
             android:autoSizeStepGranularity="2sp"
+            android:autoSizeTextType="uniform"
+            android:onClick="toggleLockBounds"
+            android:background="@android:color/transparent"
             android:text="LOCK BOUNDS"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_pause_start"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/lock_stat"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="21dp"
+            android:layout_marginBottom="17dp"
+            android:text="0"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/lamp"
+            app:layout_constraintStart_toEndOf="@+id/lock_bounds"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
         <View
             android:id="@+id/lamp"
-            android:layout_width="10sp"
-            android:layout_height="10sp"
-            android:layout_marginStart="35dp"
+            android:layout_width="15sp"
+            android:layout_height="15sp"
+            android:layout_marginStart="45dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="35dp"
+            android:layout_marginEnd="25dp"
             android:layout_marginBottom="20dp"
             android:background="@android:color/darker_gray"
             app:circularflow_angles="15"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_pause_start"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/lock_bounds"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
